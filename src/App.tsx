@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import DemoComponent from './DemoComponent';
 
 class App extends Component {
   render() {
@@ -19,6 +20,12 @@ class App extends Component {
           >
             Learn React
           </a>
+          <p>
+                <DemoComponent
+                    colors={["red"]}
+                    reqProp=""
+                />
+          </p>
         </header>
       </div>
     );
