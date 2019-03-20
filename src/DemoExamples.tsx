@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { Promise } from 'q';
 
 
 
@@ -107,9 +108,7 @@ type Person = {
 
 
 /* TYPES VS INTERFACES */
-type EarthlyTransportType = {  };
-type EtherealTransportType = "Vortex" | "Black Hole" | "Beam";
-type TransportType = EarthlyTransportType | EtherealTransportType;
+type TransportType = "Vortex" | "Black Hole" | "Beam";
 
 interface Transporter {
     transport: TransportType
@@ -119,18 +118,128 @@ interface Holder {
     pods: number
 }
 
-type SpaceShipType = Transporter & Holder; //Use & to add interfaces together, similar to extending
+type SpaceShipAmpersandType = Transporter & Holder; //Use & to add interfaces together, similar to extending
+type SpaceShipPipeType = Transporter | Holder; //Use | to make the type be either interface
 interface SpaceShipInterface extends Transporter, Holder {
 
 }
 
-/* */
-/* */
-/* */
-//function getGreeting(name: string, prefix?: "Mr" | "Mrs" | "Ms"): string {
-//    let prefixString: string = prefix || "";
+//////////////// Differences when being implemented in classes ////////////////
 
-//    return `Hello, ${prefixString} ${name}!`;
+class SpaceShipAmpersandTypeClass implements SpaceShipAmpersandType {
+    transport: TransportType = "Vortex"; //can declare interface/type props and instantiate in "body"
+    pods: number = 0;
+}
+
+//Doesn't work b/c class can't implement types that use |
+//class SpaceShipPipeTypeClass implements SpaceShipPipeType { 
+//    transport: TransportType = "Vortex";
+//    pods: number = 1;
 //}
 
-//getGreeting("test");
+class SpaceShipInterfaceClass implements SpaceShipInterface {
+    constructor() {
+        this.transport = "Vortex";
+        this.pods = 1;
+    }
+
+    transport: TransportType; //OR can declare interface/type props and instantiate in constructor
+    pods: number;   
+}
+
+//////////////// Differences when being extended by other interfaces ////////////////
+
+interface SpaceShipAmpersandInterface extends SpaceShipAmpersandType {
+
+}
+
+//Doesn't work b/c interface can't extend types that use |
+//interface PipeInterface extends SpaceShipPipeType {
+//}
+
+interface SpaceShipInterfaceInterface extends SpaceShipInterface {
+
+}
+
+//////////////// Differences when defining it multiple times (declaration merging) ////////////////
+
+interface MultiDefInterface {
+    prop1: string
+}
+
+interface MultiDefInterface { //could be located in a separate definition file -- like extending a library's definitions
+    prop2: string
+}
+
+let multiDefIntObj: MultiDefInterface = {
+    prop1: "",
+    prop2: ""
+}
+
+type MultiDefType = {
+    prop1: string
+}
+
+//cannot create a new type "variable" with the same name
+//type MultiDefType = {
+//    prop2: string
+//}
+
+
+
+/* GENERICS */
+
+function genericFunc<T>(input: T): T[] {
+    return [input];
+}
+
+
+
+/* CASTING */
+function noCastToUpper(input: string | undefined): string | undefined {
+    if (input == undefined)
+        return undefined;
+
+    return input.toUpperCase();
+}
+
+function castToUpper(input: string | undefined): string {
+    return (input as string).toUpperCase();
+}
+
+function forceCast(): string {
+    return undefined as any as string; //use this sparingly! know that it's circumventing TS, and may mess you up downstream
+}
+
+interface KnownType {
+    name: string
+}
+
+function knownTypeCast(): KnownType {
+    let json = '{ "name": "Annie" }';
+
+    return JSON.parse(json) as KnownType;
+
+    //let obj: KnownType = JSON.parse(json);
+    //return obj;
+}
+
+
+
+/* PARTIAL and READONLY */
+
+interface Computer {
+    name: string
+    ip: string
+}
+
+let partialComputer: Partial<Computer> = { //Partial makes all properties optional
+
+}
+
+let readOnlyComputer: Readonly<Computer> = {
+    name: "Annie's Computer",
+    ip: "127.0.0.1"
+}
+
+//readOnlyComputer.name = "Bob's Computer"; //Not allowed, due to Readonly
