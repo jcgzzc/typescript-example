@@ -12,7 +12,7 @@
     "react-d3-components": "^0.9.1",
     "react-dom": "^16.8.4",
     "react-scripts": "2.1.8",
-    "typescript": "2.4.1"
+    "typescript": "3.3.3333"
   },
   "scripts": {
     "start": "react-scripts start",
