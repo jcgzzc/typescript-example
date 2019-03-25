@@ -1,7 +1,4 @@
 declare module 'react-d3-components' {
-    const defExport: any;
-    export default defExport;
-
     export class BarChart extends React.Component<BarChartProps & any, any> {
 
     }

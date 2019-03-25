@@ -1,6 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
-import * as reactD3 from 'react-d3-components';
+import { BarChart } from 'react-d3-components';
 
 export default class extends React.Component<Props, State> {
     render() {
@@ -31,13 +31,13 @@ export default class extends React.Component<Props, State> {
                     classname classes: {classes}
                 </div>
 
-                <ol type="a">
+                <ol type="a" color="blue" start={3}>
                     <li>
                         first item in list
                     </li>
                 </ol>
 
-                <reactD3.BarChart
+                <BarChart
                     data={data}
                     height={400}
                     width={600}
