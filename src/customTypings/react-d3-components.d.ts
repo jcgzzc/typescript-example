@@ -5,6 +5,9 @@ declare module 'react-d3-components' {
 
     interface BarChartProps {
         data: BarChartData[]
+        //height?: number //commented out to show how the "& any" allows us to use this property even when not declared
+        width?: number
+        margin?: MarginValues
     }
 
     export interface BarChartData {
@@ -15,5 +18,12 @@ declare module 'react-d3-components' {
     export interface BarChartValue {
         x: string,
         y: number
+    }
+
+    export interface MarginValues {
+        top?: number
+        bottom?: number
+        left?: number
+        right?: number
     }
 }
