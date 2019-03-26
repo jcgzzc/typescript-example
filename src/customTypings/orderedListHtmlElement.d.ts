@@ -1,4 +1,4 @@
-import * as React from 'react';
+import 'react';
 
 declare module 'react' {
     interface OlHTMLAttributes<T> {
