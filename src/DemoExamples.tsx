@@ -40,21 +40,34 @@ function explicitReturnType(): string { //note explicit ": string" return type
 
 
 /* INTERFACES */
-interface Transport {
-    type: "Air" | "Land" | "Sea" //create "enums" by using specific values
-    identifier: string //can leave end blank
-}
-
 interface Vehicle {
     color: string, //can use comma
     wheels: number; //can use semi-colon
-    passengers: Passenger[] //can use interface declared below
-    passengers2: [{
+    passengers: Passenger[] //can use interface declared below this piece of code (or imported from a file)
+    passengers2: {
         name: string,
         shoeSize?: number,
         hairColor?: string
-    }],
+    }[],
     turnOn: (sound: string) => string
+}
+
+class Train implements Vehicle { //interfaces can be used on classes
+    color = "yellow";
+    wheels = 72;
+    passengers = [];
+    passengers2 = [{
+        name: "Alice",
+        hairColor: "brown"
+    }];
+    turnOn = (sound: string) => { return `The train goes ${sound}!` }
+    //turnOn = (sound: number) => { return "Choo Choo!" } //this would fail, b/c types are mismatched
+    //turnOn = () => { return "Choo Choo!" } //will also work; note no input string, b/c JavaScript
+}
+
+interface Transport {
+    type: "Air" | "Land" | "Sea" //create "enums" by using specific values
+    identifier: string //can leave line ending blank
 }
 
 interface Passenger {
@@ -67,7 +80,7 @@ interface Car extends Vehicle, Transport { //can extend multiple
     decals: boolean
 }
 
-let car: Car = {
+let car: Car = { //interfaces can be used on variables
     type: "Land", //note autocomplete on "enum"
     identifier: "TSR0CK5",
     color: "blue",
@@ -102,7 +115,14 @@ type Person = {
     movement: DanceOrFightStyle
 }
 
+//only types can be used when declaring a property type that is not an object (interfaces can only do objects)
+type SomeFunc = (name: string) => string
 
+function getGreetingMessage(formatName: SomeFunc) {
+    let userName = "alice"
+    userName = formatName(userName);
+    return `Greetings ${userName}!`;
+}
 
 /* TYPES VS INTERFACES */
 type TransportType = "Vortex" | "Black Hole" | "Beam";
@@ -147,7 +167,7 @@ class SpaceShipInterfaceClass implements SpaceShipInterface {
 //////////////// Differences when being extended by other interfaces ////////////////
 
 interface SpaceShipAmpersandInterface extends SpaceShipAmpersandType {
-
+    
 }
 
 //Doesn't work b/c interface can't extend types that use |
